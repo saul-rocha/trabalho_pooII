@@ -1,4 +1,4 @@
-import history
+from src.history import Historico
 
 class Conta:
     _qtd_contas = 0
@@ -8,7 +8,7 @@ class Conta:
         self._titular = client
         self._saldo = saldo
         self._limite = limite
-        self.historico = history.Historico()
+        self.historico = Historico()
         Conta._qtd_contas += 1
 
     @property

@@ -1,4 +1,5 @@
-from src.conta import Conta, Client # importa a classe do diretorio src
+from src.conta import Conta# importa a classe do diretorio src
+from src.cliente import Client
 
 cc = Client("Saul", "Rocha", "1111")
 c1c = Client("Romuere", "Silva", "2222")
