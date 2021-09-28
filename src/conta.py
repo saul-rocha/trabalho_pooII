@@ -1,50 +1,4 @@
-import datetime
-
-class Historico:
-    def __init__(self):
-        self.data_abertura = datetime.datetime.today()
-        self.transacoes = []
-
-    def imprime(self):
-        print("data de abertura: {}".format(self.data_abertura))
-        print("transações: ")
-        for i in self.transacoes:
-            print("-", i)
-
-class Client:
-
-    __slots__ = ['_nome','_sobrenome', '_cpf']
-    
-    def __init__(self, nome, sobrenome, cpf):
-        self._nome = nome
-        self._sobrenome = sobrenome
-        self._cpf = cpf
-    @property
-    def nome(self):
-        return self._nome
-    @property
-    def sobrenome(self):
-        return self._sobrenome
-    @property
-    def cpf(self):
-        return self._cpf
-
-    @nome.setter
-    def nome(self, nome):
-        self._nome = nome
-    @sobrenome.setter
-    def sobrenome(self, sobrenome):
-        self._sobrenome = sobrenome
-    @cpf.setter
-    def cpf(self, cpf):
-        self._cpf = cpf
-
-
-    def imprimir(self):
-        print("nome: ", self.nome)
-        print("sobrenome: ", self.sobrenome)
-        print("cpf: ", self.cpf)
-
+import history
 
 class Conta:
     _qtd_contas = 0
@@ -54,7 +8,7 @@ class Conta:
         self._titular = client
         self._saldo = saldo
         self._limite = limite
-        self.historico = Historico()
+        self.historico = history.Historico()
         Conta._qtd_contas += 1
 
     @property
