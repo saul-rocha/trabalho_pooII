@@ -19,3 +19,10 @@ class Cadastro:
             if lp.numero == numero:
                 res = lp
         return res
+    
+    def busca_cpf(self, cpf):
+        res = None
+        for lp in self._lista_Contas:
+            if lp.titular.cpf == cpf:
+                res = lp
+        return res

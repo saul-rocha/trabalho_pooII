@@ -2,8 +2,8 @@ from src.history import Historico
 
 class Conta:
     _qtd_contas = 0
-    __slots__ = ["_numero", "_titular", "_saldo", "_limite","_senha" "historico"]
-    def __init__(self, numero, client, saldo = 0, limite = 100, senha):
+    __slots__ = ["_numero", "_titular", "_saldo", "_limite", "_senha", "historico"]
+    def __init__(self, numero, client, saldo, limite, senha):
         self._numero = numero
         self._titular = client
         self._saldo = saldo
@@ -18,7 +18,7 @@ class Conta:
 
     @property
     def senha(self):
-        return self.senha
+        return self._senha
 
     @property
     def titular(self):
@@ -87,7 +87,7 @@ class Conta:
             return False
 
     def autentica(self, cpf, senha):
-        if cpf == self.cpf and senha == self.senha:
+        if cpf == self.titular.cpf and senha == self.senha:
             return True
         else:
             return False
