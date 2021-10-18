@@ -89,8 +89,14 @@ class Main(QMainWindow, Ui_Main):
         self.cadastrar.pushButton.clicked.connect(self.botaoOk)
         self.cadastrar.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.deposita.pushButton.clicked.connect(self.botaoDeposita)
-        self.deposita.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.home.pushButton_2.clicked.connect(self.abrirTelaHome)
+        self.home.pushButton.clicked.connect(self.botaoSacar)
+        self.home.pushButton_3.clicked.connect(self.botaoExtrato)
+        self.home.pushButton_4.clicked.connect(self.botaoTransfere)
+        
+
+       
+       
 
         self.saque.pushButton.clicked.connect(self.botaoSacar)
         self.saque.pushButton_2.clicked.connect(self.botaoVoltar)
@@ -109,10 +115,10 @@ class Main(QMainWindow, Ui_Main):
             sobrenome = self.cadastrar.lineEdit_4.text()
             cpf = self.cadastrar.lineEdit_6.text()
             numero = self.cadastrar.lineEdit_7.text()
-            limite = float(self.cadastrar.lineEdit_8.text())
+            limite = self.cadastrar.lineEdit_8.text()
             senha = self.cadastrar.lineEdit_9.text()
 
-            if not(nome == '' or sobrenome == '' or cpf == '' or numero == '' or limite == None or senha == ''):
+            if not(nome == '' or sobrenome == '' or cpf == '' or numero == '' or limite == '' or senha == ''):
                 cliente = Client(nome,sobrenome,cpf)
                 c = Conta(numero, cliente, 0.0, limite, senha)
                 if(self.cad.cadastra(c)):
@@ -131,39 +137,35 @@ class Main(QMainWindow, Ui_Main):
 
     def botaoEntrar(self):
         cpf = self.login.lineEdit.text()
-        senha = self.login.lineEdit.text()
+        senha = self.login.lineEdit_2.text()
 
         conta = self.cad.busca_cpf(cpf)
         if(conta != None):
-            if(self.si.login(conta, cpf, senha)):
-                self.login.pushButton.clicked.connect(self.abrirTelaHome)
-                self.home.lineEdit_2.setText(str(conta.saldo))
+            if(self.si.login(conta, cpf, senha) == True):
+                self.QtStack.setCurrentIndex(7)
+                self.home.lineEdit.setText(str(conta.saldo))
                 self.home.lineEdit_2.setText(str(conta.limite))
+
 
             else:
                 QMessageBox.information(None, 'GP Bank', 'Login incorreto!')
+                self.cadastrar.lineEdit.setText('')
+                self.cadastrar.lineEdit_4.setText('')
         else:
             QMessageBox.information(None, 'GP Bank', 'Nenhuma conta cadastrada neste CPF!') 
+            self.cadastrar.lineEdit.setText('')
+            self.cadastrar.lineEdit_4.setText('')
 
-
-    def botaoDeposita(self):
+    def botaoDeposita(self, conta):
         valor = 0.0
-        numero = self.deposita.lineEdit.text()
         valor = float(self.deposita.lineEdit_2.text())
-        cliente = self.cad.busca(numero)
-        if(cliente != None):
 
-            res = cliente.deposita(valor)
-            if res == False:
-                QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
-            else:
-                QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')    
-
+        res = conta.deposita(valor)
+        if res == False:
+            QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
         else:
-            QMessageBox.information(None,'GP Bank', 'Conta não encontrada!')
+            QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')    
 
-        self.QtStack.setCurrentIndex(0)
-        #self.tela_buscar.pushButton_2.clicked.connect(self.botaoVoltar)
 
     
     def abrirTelaHome(self):
