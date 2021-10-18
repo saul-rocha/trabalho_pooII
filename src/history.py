@@ -5,8 +5,9 @@ class Historico:
         self.data_abertura = datetime.datetime.today()
         self.transacoes = []
 
-    def imprime(self):
-        print("data de abertura: {}".format(self.data_abertura))
-        print("transações: ")
+    def imprime(self, res):
+        res.join("data de abertura: {}\n".format(self.data_abertura))
+        res.join("transações: ")
         for i in self.transacoes:
-            print("-", i)
+            res.join(i,"\n")
+        return res

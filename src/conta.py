@@ -31,9 +31,9 @@ class Conta:
     def numero(self, numero):
         self._numero = numero
 
-    @titular.setter
+    '''@titular.setter
     def titular(self, cliente):
-        self._client = cliente
+        self._client = cliente'''
 
     @saldo.setter
     def saldo(self, saldo):
@@ -45,15 +45,15 @@ class Conta:
 
 ##retorna True se foi efetuado e False caso não
     def deposita(self, valor):
-        if valor < 0:
+        if valor <= 0:
             return False
         else:
-            self.saldo += valor
+            self.saldo = int(self.saldo)+int(valor)
             self.historico.transacoes.append("Deposito  de {}".format(valor))
             return True
 
     def saca(self, saque):
-        if self.saldo > saque:
+        if self.saldo >= saque:
             self.saldo -= saque
             self.historico.transacoes.append("Saque  de {}".format(saque))
             return True
@@ -65,7 +65,6 @@ class Conta:
         self.titular.imprimir()
         print("Saldo: ", self.saldo)
         print("Limite: ", self.limite)
-        self.historico.imprime()
         self.historico.transacoes.append("tirou extrato - saldo de {}".format(self.saldo))
 
     def transferencia(self, destino, valor):
