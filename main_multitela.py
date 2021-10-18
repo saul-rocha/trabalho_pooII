@@ -80,22 +80,24 @@ class Main(QMainWindow, Ui_Main):
 
         self.cad = Cadastro()
         self.si = SistemaInterno()
+
         self.principal.pushButton.clicked.connect(self.abrirTelaLogin)
         self.principal.pushButton_2.clicked.connect(self.abrirTelaCadastro)
 
-        self.login.pushButton.clicked.connect(self.botaoEntrar)
+        self.aux = self.login.pushButton.clicked.connect(self.botaoEntrar)
         self.login.pushButton_2.clicked.connect(self.botaoVoltar)
 
         self.cadastrar.pushButton.clicked.connect(self.botaoOk)
         self.cadastrar.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.home.pushButton_2.clicked.connect(self.abrirTelaHome)
+        self.home.pushButton_2.clicked.connect(self.abrirTelaDeposita(self.aux))
+
+
+
         self.home.pushButton.clicked.connect(self.botaoSacar)
         self.home.pushButton_3.clicked.connect(self.botaoExtrato)
         self.home.pushButton_4.clicked.connect(self.botaoTransfere)
         
-
-       
        
 
         self.saque.pushButton.clicked.connect(self.botaoSacar)
@@ -133,7 +135,7 @@ class Main(QMainWindow, Ui_Main):
                     QMessageBox.information(None, 'GP Bank', 'CPF informado já existe!')
             else:
                 QMessageBox.information(None, 'GP Bank', 'Todas as informações devem ser preenchidas!')
-    
+
 
     def botaoEntrar(self):
         cpf = self.login.lineEdit.text()
@@ -146,30 +148,27 @@ class Main(QMainWindow, Ui_Main):
                 self.home.lineEdit.setText(str(conta.saldo))
                 self.home.lineEdit_2.setText(str(conta.limite))
 
-
             else:
+                
                 QMessageBox.information(None, 'GP Bank', 'Login incorreto!')
-                self.cadastrar.lineEdit.setText('')
-                self.cadastrar.lineEdit_4.setText('')
+                
         else:
             QMessageBox.information(None, 'GP Bank', 'Nenhuma conta cadastrada neste CPF!') 
-            self.cadastrar.lineEdit.setText('')
-            self.cadastrar.lineEdit_4.setText('')
+
+        self.login.lineEdit.setText('')
+        self.login.lineEdit_2.setText('')
+
+        return conta
 
     def botaoDeposita(self, conta):
         valor = 0.0
-        valor = float(self.deposita.lineEdit_2.text())
+        valor = self.deposita.lineEdit_2.text()
 
         res = conta.deposita(valor)
         if res == False:
             QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
         else:
             QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')    
-
-
-    
-    def abrirTelaHome(self):
-        self.QtStack.setCurrentIndex(7)        
 
     def botaoExtrato(self):
         numero = self.extrato.lineEdit.text()
@@ -240,6 +239,8 @@ class Main(QMainWindow, Ui_Main):
 
     def abrirTelaTransferencia(self):
         self.QtStack.setCurrentIndex(6)
+
+
 
 
 if __name__ == '__main__':

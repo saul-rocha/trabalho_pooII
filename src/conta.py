@@ -50,7 +50,7 @@ class Conta:
 
 ##retorna True se foi efetuado e False caso não
     def deposita(self, valor):
-        if float(valor) <= 0:
+        if int(valor) <= 0:
             return False
         else:
             self.saldo = float(self.saldo) + float(valor)
