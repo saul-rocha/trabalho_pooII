@@ -8,16 +8,19 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
 from PyQt5.QtCore import QCoreApplication
 
 
-from interfaces.tela_cadastrar import 
-from interfaces. import 
-from interfaces. import 
-from interfaces. import 
-from interfaces. import 
+from interfaces.tela_cadastrar import Cadastrar
+from interfaces.tela_deposita import Deposita
+from interfaces.tela_extrato import Extrato 
+from interfaces.tela_login import Login
+from interfaces.tela_main_menu import Principal
+from interfaces.tela_saque import Saque
+from interfaces.tela_transferencia import Transferencia 
 
 from src.cadastro import Cadastro
 from src.conta import Conta
 from src.cliente import Client
-
+from src.autentica import Autenticavel
+from src.auth import SistemaInterno
 
 class Ui_Main(QtWidgets.QWidget):
     def setupUi(self, Main):
@@ -31,27 +34,37 @@ class Ui_Main(QtWidgets.QWidget):
         self.stack2 = QtWidgets.QMainWindow() 
         self.stack3 = QtWidgets.QMainWindow()
         self.stack4 = QtWidgets.QMainWindow()
+        self.stack5 = QtWidgets.QMainWindow()
+        self.stack6 = QtWidgets.QMainWindow()
 
         self.principal = Principal()
         self.principal.setupUi(self.stack0)
 
+        self.login = Login()
+        self.login.setupUi(self.stack1)
+
+        self.cadastrar = Cadastro()
+        self.cadastrar.setupUi(self.stack2)
+
         self.deposita = Deposita()
-        self.deposita.setupUi(self.stack1)
+        self.deposita.setupUi(self.stack3)
 
         self.extrato = Extrato()
-        self.extrato.setupUi(self.stack2)
+        self.extrato.setupUi(self.stack4)
 
         self.saque = Saque()
-        self.saque.setupUi(self.stack3)
+        self.saque.setupUi(self.stack5)
 
         self.transferencia = Transferencia()
-        self.transferencia.setupUi(self.stack4)
+        self.transferencia.setupUi(self.stack6)
 
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
         self.QtStack.addWidget(self.stack2)
         self.QtStack.addWidget(self.stack3)
         self.QtStack.addWidget(self.stack4)
+        self.QtStack.addWidget(self.stack5)
+        self.QtStack.addWidget(self.stack6)
 
 
 class Main(QMainWindow, Ui_Main):
@@ -60,38 +73,42 @@ class Main(QMainWindow, Ui_Main):
         self.setupUi(self)
 
         self.cad = Cadastro()
-        self.principal.pushButton_2.clicked.connect(self.abrirTelaDeposita)
-        self.principal.pushButton_3.clicked.connect(self.abrirTelaSacar)
-        self.principal.pushButton_4.clicked.connect(self.abrirTelaTransferencia)
-        self.principal.pushButton_5.clicked.connect(self.abrirTelaExtrato)
+        self.si = SistemaInterno()
+        self.principal.pushButton.clicked.connect(self.abrirTelaLogin)
+        self.principal.pushButton_2.clicked.connect(self.abrirTelaCadastro)
 
-        self.principal.pushButton.clicked.connect(self.botaoOk)
+        self.cadastrar.pushButton.clicked.connect(self.botaoOk)
+        self.cadastrar.pushButton.clicked.connect(self.botaoVoltar)
+
+
         self.deposita.pushButton.clicked.connect(self.botaoDeposita)
         self.saque.pushButton.clicked.connect(self.botaoSacar)
         self.transferencia.pushButton.clicked.connect(self.botaoTransfere)
         self.extrato.pushButton.clicked.connect(self.botaoExtrato)
 
     def botaoOk(self):
-        nome = self.principal.lineEdit.text()
-        sobrenome = self.principal.lineEdit_4.text()
-        cpf = self.principal.lineEdit_6.text()
-        numero = self.principal.lineEdit_7.text()
-        limite = self.principal.lineEdit_8.text()
+            nome = self.cadastrar.lineEdit.text()
+            sobrenome = self.cadastrar.lineEdit_4.text()
+            cpf = self.cadastrar.lineEdit_6.text()
+            numero = self.cadastrar.lineEdit_7.text()
+            limite = self.cadastrar.lineEdit_8.text()
+            senha = self.cadastrar.lineEdit_9.text()
 
-        if not(nome == '' or sobrenome == '' or cpf == '' or numero == '' or limite == ''):
-            cliente = Client(nome,sobrenome,cpf)
-            c = Conta(numero,cliente,0,limite)
-            if(self.cad.cadastra(c)):
-                QMessageBox.information(None, 'GP Bank', 'Cadastro realizado com sucesso!')
-                self.principal.lineEdit.setText('')
-                self.principal.lineEdit_4.setText('')
-                self.principal.lineEdit_6.setText('')
-                self.principal.lineEdit_7.setText('')
-                self.principal.lineEdit_8.setText('')
+            if not(nome == '' or sobrenome == '' or cpf == '' or numero == '' or limite == '' or senha == ''):
+                cliente = Client(nome,sobrenome,cpf)
+                c = Conta(numero, cliente, 0, limite, senha)
+                if(self.cad.cadastra(c)):
+                    QMessageBox.information(None, 'GP Bank', 'Cadastro realizado com sucesso!')
+                    self.cadastrar.lineEdit.setText('')
+                    self.cadastrar.lineEdit_4.setText('')
+                    self.cadastrar.lineEdit_6.setText('')
+                    self.cadastrar.lineEdit_7.setText('')
+                    self.cadastrar.lineEdit_8.setText('')
+                    self.cadastrar.lineEdit_9.setText('')
+                else:
+                    QMessageBox.information(None, 'GP Bank', 'CPF informado já existe!')
             else:
-                QMessageBox.information(None, 'GP Bank', 'CPF informado já existe!')
-        else:
-            QMessageBox.information(None, 'GP Bank', 'Todas as informações devem ser preenchidas!')
+                QMessageBox.information(None, 'GP Bank', 'Todas as informações devem ser preenchidas!')
         
 
     def botaoDeposita(self):
@@ -165,18 +182,24 @@ class Main(QMainWindow, Ui_Main):
 
     def botaoVoltar(self):
         self.QtStack.setCurrentIndex(0)
+    
+    def abrirTelaLogin(self):
+        self.QtStack.setCurrentIndex(1)
+
+    def abrirTelaCadastro(self):
+        self.QtStack.setCurrentIndex(2)
 
     def abrirTelaDeposita(self):
-        self.QtStack.setCurrentIndex(1)
+        self.QtStack.setCurrentIndex(3)
     
     def abrirTelaExtrato(self):
-        self.QtStack.setCurrentIndex(2)
+        self.QtStack.setCurrentIndex(4)
     
     def abrirTelaSacar(self):
-        self.QtStack.setCurrentIndex(3)
+        self.QtStack.setCurrentIndex(5)
 
     def abrirTelaTransferencia(self):
-        self.QtStack.setCurrentIndex(4)
+        self.QtStack.setCurrentIndex(6)
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Frame(object):
+class Cadastrar(object):
     def setupUi(self, Frame):
         Frame.setObjectName("Frame")
         Frame.resize(589, 411)
@@ -134,6 +134,8 @@ class Ui_Frame(object):
         self.retranslateUi(Frame)
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
+
+
     def retranslateUi(self, Frame):
         _translate = QtCore.QCoreApplication.translate
         Frame.setWindowTitle(_translate("Frame", "GP Bank"))
@@ -152,7 +154,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Frame = QtWidgets.QFrame()
-    ui = Ui_Frame()
+    ui = Cadastrar()
     ui.setupUi(Frame)
     Frame.show()
     sys.exit(app.exec_())

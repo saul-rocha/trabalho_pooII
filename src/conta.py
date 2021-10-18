@@ -2,18 +2,23 @@ from src.history import Historico
 
 class Conta:
     _qtd_contas = 0
-    __slots__ = ["_numero", "_titular", "_saldo", "_limite", "historico"]
-    def __init__(self, numero, client, saldo = 0, limite = 100):
+    __slots__ = ["_numero", "_titular", "_saldo", "_limite","_senha" "historico"]
+    def __init__(self, numero, client, saldo = 0, limite = 100, senha):
         self._numero = numero
         self._titular = client
         self._saldo = saldo
         self._limite = limite
+        self._senha = senha
         self.historico = Historico()
         Conta._qtd_contas += 1
 
     @property
     def numero(self):
         return self._numero
+
+    @property
+    def senha(self):
+        return self.senha
 
     @property
     def titular(self):
@@ -78,5 +83,11 @@ class Conta:
                 destino.deposita(valor)
                 self.historico.transacoes.append("transferencia de {} para conta {}".format(valor, destino.numero))
                 return True
+        else:
+            return False
+
+    def autentica(self, cpf, senha):
+        if cpf == self.cpf and senha == self.senha:
+            return True
         else:
             return False
