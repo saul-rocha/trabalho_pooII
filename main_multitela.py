@@ -39,29 +39,29 @@ class Ui_Main(QtWidgets.QWidget):
         self.stack6 = QtWidgets.QMainWindow()
         self.stack7 = QtWidgets.QMainWindow()
 
-        self.principal = Principal()
-        self.principal.setupUi(self.stack0)
+        self.tela_main_menu = Principal()
+        self.tela_main_menu.setupUi(self.stack0)
 
-        self.login = Login()
-        self.login.setupUi(self.stack1)
+        self.tela_login = Login()
+        self.tela_login.setupUi(self.stack1)
 
-        self.cadastrar = Cadastrar()
-        self.cadastrar.setupUi(self.stack2)
+        self.tela_cadastrar = Cadastrar()
+        self.tela_cadastrar.setupUi(self.stack2)
 
-        self.deposita = Deposita()
-        self.deposita.setupUi(self.stack3)
+        self.tela_deposita = Deposita()
+        self.tela_deposita.setupUi(self.stack3)
 
-        self.extrato = Extrato()
-        self.extrato.setupUi(self.stack4)
+        self.tela_extrato = Extrato()
+        self.tela_extrato.setupUi(self.stack4)
 
-        self.saque = Saque()
-        self.saque.setupUi(self.stack5)
+        self.tela_saque = Saque()
+        self.tela_saque.setupUi(self.stack5)
 
-        self.transferencia = Transferencia()
-        self.transferencia.setupUi(self.stack6)
+        self.tela_transferencia = Transferencia()
+        self.tela_transferencia.setupUi(self.stack6)
 
-        self.home = Home()
-        self.home.setupUi(self.stack7)
+        self.tela_home = Home()
+        self.tela_home.setupUi(self.stack7)
 
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
@@ -81,56 +81,57 @@ class Main(QMainWindow, Ui_Main):
         self.cad = Cadastro()
         self.si = SistemaInterno()
 
-        self.principal.pushButton.clicked.connect(self.abrirTelaLogin)
-        self.principal.pushButton_2.clicked.connect(self.abrirTelaCadastro)
+        self.tela_main_menu.pushButton.clicked.connect(self.abrirTelaLogin)
+        self.tela_main_menu.pushButton_2.clicked.connect(self.abrirTelaCadastro)
 
-        self.aux = self.login.pushButton.clicked.connect(self.botaoEntrar)
-        self.login.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_login.pushButton.clicked.connect(self.botaoEntrar)
+        self.tela_login.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.cadastrar.pushButton.clicked.connect(self.botaoOk)
-        self.cadastrar.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_cadastrar.pushButton.clicked.connect(self.botaoOk)
+        self.tela_cadastrar.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.home.pushButton_2.clicked.connect(self.abrirTelaDeposita(self.aux))
+        self.tela_home.pushButton_2.clicked.connect(self.abrirTelaDeposita)
+        self.tela_deposita.pushButton.clicked.connect(self.botaoDeposita)
+        self.tela_deposita.pushButton_2.clicked.connect(self.abrirTelaHome)
 
 
-
-        self.home.pushButton.clicked.connect(self.botaoSacar)
-        self.home.pushButton_3.clicked.connect(self.botaoExtrato)
-        self.home.pushButton_4.clicked.connect(self.botaoTransfere)
+        self.tela_home.pushButton.clicked.connect(self.botaoSacar)
+        self.tela_home.pushButton_3.clicked.connect(self.botaoExtrato)
+        self.tela_home.pushButton_4.clicked.connect(self.botaoTransfere)
         
        
 
-        self.saque.pushButton.clicked.connect(self.botaoSacar)
-        self.saque.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_saque.pushButton.clicked.connect(self.botaoSacar)
+        self.tela_saque.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.transferencia.pushButton.clicked.connect(self.botaoTransfere)
-        self.transferencia.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_transferencia.pushButton.clicked.connect(self.botaoTransfere)
+        self.tela_transferencia.pushButton_2.clicked.connect(self.botaoVoltar)
 
-        self.home.pushButton_5.clicked.connect(self.botaoVoltar)
+        self.tela_home.pushButton_5.clicked.connect(self.botaoVoltar)
 
-        #self.extrato.pushButton.clicked.connect(self.botaoExtrato)
-        #self.extrato.pushButton_2.clicked.connect(self.botaoVoltar)
+        #self.tela_extrato.pushButton.clicked.connect(self.botaoExtrato)
+        #self.tela_extrato.pushButton_2.clicked.connect(self.botaoVoltar)
 
 
     def botaoOk(self):
-            nome = self.cadastrar.lineEdit.text()
-            sobrenome = self.cadastrar.lineEdit_4.text()
-            cpf = self.cadastrar.lineEdit_6.text()
-            numero = self.cadastrar.lineEdit_7.text()
-            limite = self.cadastrar.lineEdit_8.text()
-            senha = self.cadastrar.lineEdit_9.text()
+            nome = self.tela_cadastrar.lineEdit.text()
+            sobrenome = self.tela_cadastrar.lineEdit_4.text()
+            cpf = self.tela_cadastrar.lineEdit_6.text()
+            numero = self.tela_cadastrar.lineEdit_7.text()
+            limite = self.tela_cadastrar.lineEdit_8.text()
+            senha = self.tela_cadastrar.lineEdit_9.text()
 
             if not(nome == '' or sobrenome == '' or cpf == '' or numero == '' or limite == '' or senha == ''):
                 cliente = Client(nome,sobrenome,cpf)
                 c = Conta(numero, cliente, 0.0, limite, senha)
                 if(self.cad.cadastra(c)):
                     QMessageBox.information(None, 'GP Bank', 'Cadastro realizado com sucesso!')
-                    self.cadastrar.lineEdit.setText('')
-                    self.cadastrar.lineEdit_4.setText('')
-                    self.cadastrar.lineEdit_6.setText('')
-                    self.cadastrar.lineEdit_7.setText('')
-                    self.cadastrar.lineEdit_8.setText('')
-                    self.cadastrar.lineEdit_9.setText('')
+                    self.tela_cadastrar.lineEdit.setText('')
+                    self.tela_cadastrar.lineEdit_4.setText('')
+                    self.tela_cadastrar.lineEdit_6.setText('')
+                    self.tela_cadastrar.lineEdit_7.setText('')
+                    self.tela_cadastrar.lineEdit_8.setText('')
+                    self.tela_cadastrar.lineEdit_9.setText('')
                 else:
                     QMessageBox.information(None, 'GP Bank', 'CPF informado já existe!')
             else:
@@ -138,15 +139,15 @@ class Main(QMainWindow, Ui_Main):
 
 
     def botaoEntrar(self):
-        cpf = self.login.lineEdit.text()
-        senha = self.login.lineEdit_2.text()
+        cpf = self.tela_login.lineEdit.text()
+        senha = self.tela_login.lineEdit_2.text()
 
         conta = self.cad.busca_cpf(cpf)
         if(conta != None):
             if(self.si.login(conta, cpf, senha) == True):
                 self.QtStack.setCurrentIndex(7)
-                self.home.lineEdit.setText(str(conta.saldo))
-                self.home.lineEdit_2.setText(str(conta.limite))
+                self.tela_home.lineEdit.setText(str(conta.saldo))
+                self.tela_home.lineEdit_2.setText(str(conta.limite))
 
             else:
                 
@@ -155,38 +156,43 @@ class Main(QMainWindow, Ui_Main):
         else:
             QMessageBox.information(None, 'GP Bank', 'Nenhuma conta cadastrada neste CPF!') 
 
-        self.login.lineEdit.setText('')
-        self.login.lineEdit_2.setText('')
+        #self.tela_login.lineEdit.setText('')
+        #self.tela_login.lineEdit_2.setText('')
 
-        return conta
-
-    def botaoDeposita(self, conta):
+    def botaoDeposita(self):
         valor = 0.0
-        valor = self.deposita.lineEdit_2.text()
+        valor = self.tela_deposita.lineEdit_2.text()
 
+        cpf = self.tela_login.lineEdit.text()
+        conta = self.cad.busca_cpf(cpf)
         res = conta.deposita(valor)
+
         if res == False:
             QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
         else:
-            QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')    
+            QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')   
+
+        self.tela_home.lineEdit.setText(str(conta.saldo))
+        self.tela_home.lineEdit_2.setText(str(conta.limite)) 
+
 
     def botaoExtrato(self):
-        numero = self.extrato.lineEdit.text()
+        numero = self.tela_extrato.lineEdit.text()
         conta = self.cad.busca(numero)
         if (conta != None):
-            #self.extrato.lineEdit_2.setText(conta.historico)    
-            self.extrato.lineEdit_3.setText(conta.titular.nome)
-            self.extrato.lineEdit_4.setText(conta.titular.cpf)
-            self.extrato.lineEdit_5.setText(conta.saldo)
+            #self.tela_extrato.lineEdit_2.setText(conta.historico)    
+            self.tela_extrato.lineEdit_3.setText(conta.titular.nome)
+            self.tela_extrato.lineEdit_4.setText(conta.titular.cpf)
+            self.tela_extrato.lineEdit_5.setText(conta.saldo)
         else:
             QMessageBox.information(None, 'GP Bank', 'Conta não encontrada!')
 
-        self.extrato.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_extrato.pushButton_2.clicked.connect(self.botaoVoltar)
         
     def botaoSacar(self):
         valor = 0
-        numero = self.deposita.lineEdit.text()
-        valor = int(self.deposita.lineEdit_2.text())
+        numero = self.tela_deposita.lineEdit.text()
+        valor = int(self.tela_deposita.lineEdit_2.text())
         cliente = self.cad.busca(numero)
 
         if(cliente != None):
@@ -201,14 +207,14 @@ class Main(QMainWindow, Ui_Main):
         self.QtStack.setCurrentIndex(0)
 
     def botaoTransfere(self):
-        numero = self.transferencia.lineEdit.text()
-        numero_dest = self.transferencia.lineEdit_3.text()
-        valor = int(self.transferencia.lineEdit_2.text())
+        numero = self.tela_transferencia.lineEdit.text()
+        numero_dest = self.tela_transferencia.lineEdit_3.text()
+        valor = int(self.tela_transferencia.lineEdit_2.text())
         cliente1 = self.cad.busca(numero)
         cliente2 =self.cad.busca(numero_dest)
 
         if(cliente1 != None and cliente2 != None):
-            res = cliente1.transferencia(cliente2, valor)
+            res = cliente1.tela_transferencia(cliente2, valor)
             if res == False:
                 QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
             else:
@@ -217,6 +223,7 @@ class Main(QMainWindow, Ui_Main):
             QMessageBox.information(None,'GP Bank', 'Conta não encontrada!')
 
         self.QtStack.setCurrentIndex(0)
+
 
 
     def botaoVoltar(self):
@@ -240,6 +247,8 @@ class Main(QMainWindow, Ui_Main):
     def abrirTelaTransferencia(self):
         self.QtStack.setCurrentIndex(6)
 
+    def abrirTelaHome(self):
+        self.QtStack.setCurrentIndex(7)
 
 
 
