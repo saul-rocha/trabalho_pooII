@@ -95,17 +95,18 @@ class Main(QMainWindow, Ui_Main):
         self.tela_deposita.pushButton_2.clicked.connect(self.abrirTelaHome)
 
 
-        self.tela_home.pushButton.clicked.connect(self.botaoSacar)
-        self.tela_home.pushButton_3.clicked.connect(self.botaoExtrato)
-        self.tela_home.pushButton_4.clicked.connect(self.botaoTransfere)
-        
-       
-
+        self.tela_home.pushButton.clicked.connect(self.abrirTelaSacar)
         self.tela_saque.pushButton.clicked.connect(self.botaoSacar)
-        self.tela_saque.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_saque.pushButton_2.clicked.connect(self.abrirTelaHome)
+        
 
+        self.tela_home.pushButton_4.clicked.connect(self.abrirTelaTransferencia)
         self.tela_transferencia.pushButton.clicked.connect(self.botaoTransfere)
-        self.tela_transferencia.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_transferencia.pushButton_2.clicked.connect(self.abrirTelaHome)
+
+
+        self.tela_home.pushButton_3.clicked.connect(self.botaoExtrato)
+
 
         self.tela_home.pushButton_5.clicked.connect(self.botaoVoltar)
 
@@ -190,41 +191,38 @@ class Main(QMainWindow, Ui_Main):
         self.tela_extrato.pushButton_2.clicked.connect(self.botaoVoltar)
         
     def botaoSacar(self):
-        valor = 0
-        numero = self.tela_deposita.lineEdit.text()
-        valor = int(self.tela_deposita.lineEdit_2.text())
-        cliente = self.cad.busca(numero)
-
-        if(cliente != None):
-            res = cliente.saca(valor)
-            if res == False:
-                QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
-            else:
-                QMessageBox.information(None, 'GP Bank', 'Saque efetuado!')
+        cpf = self.tela_login.lineEdit.text()
+        valor = self.tela_saque.lineEdit_2.text()
+        conta = self.cad.busca_cpf(cpf)
+        
+        res = conta.saca(valor)
+        if res == False:
+            QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
         else:
-            QMessageBox.information(None,'GP Bank', 'Conta não encontrada!')
+            QMessageBox.information(None, 'GP Bank', 'Saque efetuado!')
 
-        self.QtStack.setCurrentIndex(0)
+        self.tela_home.lineEdit.setText(str(conta.saldo))
+        self.tela_home.lineEdit_2.setText(str(conta.limite)) 
 
     def botaoTransfere(self):
-        numero = self.tela_transferencia.lineEdit.text()
-        numero_dest = self.tela_transferencia.lineEdit_3.text()
-        valor = int(self.tela_transferencia.lineEdit_2.text())
-        cliente1 = self.cad.busca(numero)
-        cliente2 =self.cad.busca(numero_dest)
+        cpf = self.tela_login.lineEdit.text()
 
-        if(cliente1 != None and cliente2 != None):
-            res = cliente1.tela_transferencia(cliente2, valor)
+        numero_dest = self.tela_transferencia.lineEdit_3.text()
+        valor = self.tela_transferencia.lineEdit_2.text()
+        conta1 = self.cad.busca_cpf(cpf)
+        conta2 =self.cad.busca(numero_dest)
+
+        if(conta2 != None):
+            res = conta1.transferencia(conta2, valor)
             if res == False:
                 QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
             else:
                 QMessageBox.information(None, 'GP Bank', 'Tranferencia efetuada!')
         else:
-            QMessageBox.information(None,'GP Bank', 'Conta não encontrada!')
+            QMessageBox.information(None,'GP Bank', 'Conta destino não encontrada!')
 
-        self.QtStack.setCurrentIndex(0)
-
-
+        self.tela_home.lineEdit.setText(str(conta1.saldo))
+        self.tela_home.lineEdit_2.setText(str(conta1.limite)) 
 
     def botaoVoltar(self):
         self.QtStack.setCurrentIndex(0)

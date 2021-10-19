@@ -58,8 +58,8 @@ class Conta:
             return True
 
     def saca(self, saque):
-        if self.saldo >= saque:
-            self.saldo -= saque
+        if self.saldo >= float(saque):
+            self.saldo -= float(saque)
             self.historico.transacoes.append("Saque  de {}".format(saque))
             return True
         else:
@@ -73,14 +73,14 @@ class Conta:
         self.historico.transacoes.append("tirou extrato - saldo de {}".format(self.saldo))
 
     def transferencia(self, destino, valor):
-        if valor < 0:
+        if int(valor) < 0:
             return False
-        elif self.saldo >= valor:
-            retira = self.saca(valor)
+        elif self.saldo >= float(valor):
+            retira = self.saca(float(valor))
             if (retira == False):
                 return False
             else:
-                destino.deposita(valor)
+                destino.deposita(float(valor))
                 self.historico.transacoes.append("transferencia de {} para conta {}".format(valor, destino.numero))
                 return True
         else:
