@@ -1,3 +1,4 @@
+from datetime import datetime
 from src.history import Historico
 
 class Conta:
@@ -54,13 +55,13 @@ class Conta:
             return False
         else:
             self.saldo = float(self.saldo) + float(valor)
-            self.historico.transacoes.append("Deposito  de {}".format(valor))
+            self.historico.transacoes.append("Deposito  de {} - {}".format(valor, datetime.today()))
             return True
 
     def saca(self, saque):
         if self.saldo >= float(saque):
             self.saldo -= float(saque)
-            self.historico.transacoes.append("Saque  de {}".format(saque))
+            self.historico.transacoes.append("Saque  de {} - {}".format(saque, datetime.today()))
             return True
         else:
             return False
@@ -70,7 +71,7 @@ class Conta:
         self.titular.imprimir()
         print("Saldo: ", self.saldo)
         print("Limite: ", self.limite)
-        self.historico.transacoes.append("tirou extrato - saldo de {}".format(self.saldo))
+        self.historico.transacoes.append("tirou extrato - saldo de {} - {}".format(self.saldo, datetime.today()))
 
     def transferencia(self, destino, valor):
         if int(valor) < 0:
@@ -81,7 +82,7 @@ class Conta:
                 return False
             else:
                 destino.deposita(float(valor))
-                self.historico.transacoes.append("transferencia de {} para conta {}".format(valor, destino.numero))
+                self.historico.transacoes.append("transferencia de {} para conta {} - {}".format(valor, destino.numero, datetime.today()))
                 return True
         else:
             return False

@@ -6,8 +6,8 @@ class Historico:
         self.transacoes = []
 
     def imprime(self, res):
-        res.join("data de abertura: {}\n".format(self.data_abertura))
-        res.join("transações: ")
+        res.append("data de abertura: {}\n".format(self.data_abertura))
+        res.append("transações: \n")
         for i in self.transacoes:
-            res.join(i,"\n")
-        return res
+            res.append(i)
+        return "\n".join(res)

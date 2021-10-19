@@ -104,9 +104,10 @@ class Main(QMainWindow, Ui_Main):
         self.tela_transferencia.pushButton.clicked.connect(self.botaoTransfere)
         self.tela_transferencia.pushButton_2.clicked.connect(self.abrirTelaHome)
 
-
+        
         self.tela_home.pushButton_3.clicked.connect(self.botaoExtrato)
 
+        self.tela_extrato.pushButton_2.clicked.connect(self.abrirTelaHome)
 
         self.tela_home.pushButton_5.clicked.connect(self.botaoVoltar)
 
@@ -178,17 +179,16 @@ class Main(QMainWindow, Ui_Main):
 
 
     def botaoExtrato(self):
-        numero = self.tela_extrato.lineEdit.text()
-        conta = self.cad.busca(numero)
-        if (conta != None):
-            #self.tela_extrato.lineEdit_2.setText(conta.historico)    
-            self.tela_extrato.lineEdit_3.setText(conta.titular.nome)
-            self.tela_extrato.lineEdit_4.setText(conta.titular.cpf)
-            self.tela_extrato.lineEdit_5.setText(conta.saldo)
-        else:
-            QMessageBox.information(None, 'GP Bank', 'Conta não encontrada!')
+        self.abrirTelaExtrato()
 
-        self.tela_extrato.pushButton_2.clicked.connect(self.botaoVoltar)
+        cpf = self.tela_login.lineEdit.text()
+        conta = self.cad.busca_cpf(cpf)
+        res = conta.historico.imprime([])
+        self.tela_extrato.lineEdit_3.setText(conta.titular.nome)
+        self.tela_extrato.lineEdit_4.setText(conta.titular.cpf)
+        self.tela_extrato.lineEdit_5.setText(str(conta.saldo))
+        self.tela_extrato.textEdit.setText(res)
+
         
     def botaoSacar(self):
         cpf = self.tela_login.lineEdit.text()
@@ -223,6 +223,8 @@ class Main(QMainWindow, Ui_Main):
 
         self.tela_home.lineEdit.setText(str(conta1.saldo))
         self.tela_home.lineEdit_2.setText(str(conta1.limite)) 
+
+
 
     def botaoVoltar(self):
         self.QtStack.setCurrentIndex(0)
