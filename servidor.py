@@ -1,10 +1,10 @@
-import sys
 import socket
-import os
-import mysql.connector as mysql
 
-conexao = mysql.connect(host = 'lacalhost', db='gpbank', user='root', passwd = '')
-cursor = conexao.cursor()
+import postgresql
+
+
+conexao = postgresql.open('pq://saul_rocha:1234@localhost/gpbank')
+#conexao = postgresql.open(user = 'saul_rocha', database = 'gpbank', port = 5432, password = '1234')
 
 host = 'localhost'
 port = 8000
@@ -25,7 +25,7 @@ while(enviar != 'sair'):
     variaveis = recebe.split(',')
     if(variaveis[0] == 'cad'):
         create = """CREATE TABLE IF NOT EXISTS contas(cpf INTEGER PRIMARY KEY, nome TEXT NOT NULL, sobrenome TEXT NOT NULL, numero INTEGER NOT NULL, limite FLOAT NOT NULL, senha VARCHAR(30) NOT NULL, saldo FLOAT NOT NULL);"""
-        cursor.execute(create)
+        conexao.execute(create)
         nome = variaveis[1]
         sobrenome = variaveis[2]
         cpf = variaveis[3]
@@ -34,14 +34,14 @@ while(enviar != 'sair'):
         senha = variaveis[6]
         saldo = 0.0
         if(nome == '' or sobrenome == '' or cpf == '', numero == '' or limite == '' or senha == ''):
-            sql = "SELECT * FROM contas WHERE cpf = "+cpf+','
-            cursor.execute(sql)
+            sql = "SELECT * FROM contas WHERE cpf = "+cpf+';'
+            conexao.execute(sql)
             c=None
-            for c in cursor:
+            for c in conexao:
                c = c
             if(c == None):
                 add = 'INSERT INTO contas(cpf, nome, sobrenome, numero, limite, senha, saldo) VALUES ('+cpf+',"'+nome+'", "'+sobrenome+'", '+numero+', '+limite+', "'+senha+'", '+saldo+');'
-                cursor.execute(add)
+                conexao.execute(add)
                 enviar = 'true'
             else:
                 enviar = 'false'
@@ -52,10 +52,10 @@ while(enviar != 'sair'):
             login = variaveis[1]
             senha = variaveis[2]
             if not(login == '' or senha == ''):
-                sql = 'SELECT * FROM contas WHERE cpf="'+cpf+'" AND senha="'+senha+'");'
+                sql = 'SELECT * FROM contas WHERE cpf="'+cpf+'" AND senha="'+senha+'";'
                 acesso=None
-                cursor.execute(sql)
-                for acesso in cursor:
+                conexao.execute(sql)
+                for acesso in conexao:
                     acesso = acesso
                 if (acesso != None):
                     enviar = str(acesso[0])
@@ -72,10 +72,10 @@ while(enviar != 'sair'):
             if not(valor == '' or cpf == ''):
                 
                 sql = "SELECT * FROM contas WHERE cpf="+cpf
-                cursor.execute(sql)
+                conexao.execute(sql)
 
                 conta = None
-                for a in cursor:
+                for a in conexao:
                     conta = a
                 if (conta != None):
                     if(float(valor) > 0):
@@ -84,14 +84,14 @@ while(enviar != 'sair'):
                         create1= """CREATE TABLE IF NOT EXISTS historico(cpf INTEGER PRIMARY KEY, 
                         valor FLOAT NOT NULL, tipo_operacao TEXT NOT NULL, cpf_destino INTEGER);"""
 
-                        cursor.execute(create1)
+                        conexao.execute(create1)
 
                         update_saldo = "UPDATE contas SET saldo="+new_saldo+' WHERE cpf='+cpf
-                        cursor.execute(update_saldo)
+                        conexao.execute(update_saldo)
 
                         registra = "INSERT INTO historico (cpf, valor, tipo_operacao, cpf_destino) VALUES ("+conta[1]+float(valor)+"'Deposito'"+conta[1]+")"
 
-                        cursor.execute(registra)
+                        conexao.execute(registra)
 
                         enviar = 'true,'+new_saldo
                     else:
@@ -110,18 +110,18 @@ while(enviar != 'sair'):
             cpf = variaveis[1]
 
             sql = "SELECT * FROM contas WHERE cpf="+cpf
-            cursor.execute(sql) 
+            conexao.execute(sql) 
 
             conta = None
-            for i in cursor:
+            for i in conexao:
                 conta = i
             if(conta != None):
                 sql = "SELECT * FROM historico WHERE cpf="+cpf
-                cursor.execute(sql) 
+                conexao.execute(sql) 
                 enviar = ''
 
                 enviar+conta[1]+','+conta[0]+','+conta[6]
-                for i in cursor:
+                for i in conexao:
                     if(i[2] == 'Deposito' or i[2] == 'Saque'):
                         enviar+','+i[2]+','+'de,'+i[1]
                     else:
