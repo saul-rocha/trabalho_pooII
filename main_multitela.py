@@ -182,11 +182,11 @@ while(mensagem != '/quit'):
             control = cliente_socket.recv(1024).decode()
             mensagem = ''
             res = control.split(',')
-            if(res[0] == 'false'):
+            if(control == 'false'):
                 QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
-            elif(res[0] == 'false1'):
+            elif(control == 'false1'):
                 QMessageBox.information(None, 'GP Bank', 'CPF inválido!')
-            elif(res[0] == 'false2'):
+            elif(control == 'false2'):
                 QMessageBox.information(None, 'GP Bank', 'Todos os campos devem ser preeenchidos!')
             else:
                 QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')   
@@ -195,6 +195,7 @@ while(mensagem != '/quit'):
 
         def botaoExtrato(self):
             #self.abrirTelaExtrato()
+            global mensagem
             cpf = self.tela_login.lineEdit.text()
 
             mensagem = 'history,'+cpf
@@ -202,49 +203,69 @@ while(mensagem != '/quit'):
             control = cliente_socket.recv(1024).decode()
             mensagem = ''
             res = control.split(',')
-            if(control != 'false'):
+            if(res[1] != 'NaN'):
                 self.tela_extrato.lineEdit_3.setText(res[0])
                 self.tela_extrato.lineEdit_4.setText(res[1])
                 self.tela_extrato.lineEdit_5.setText(res[2])
                 res1 = ''
                 for i in range(3,len(res)):
-                    res1.join(i)
+                    if(res[i] == ';'):
+                        res1.join('\n')
+                    else:
+                        res1.join(res[i])
                 self.tela_extrato.textEdit.setText(res1)
-
+            else:
+                QMessageBox.information(None, 'GP Bank', 'Nenhuma transação!')
             
         def botaoSacar(self):
+            global mensagem
+
             cpf = self.tela_login.lineEdit.text()
             valor = self.tela_saque.lineEdit_2.text()
-            conta = self.cad.busca_cpf(cpf)
-            
-            res = conta.saca(valor)
-            if res == False:
-                QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
-            else:
-                QMessageBox.information(None, 'GP Bank', 'Saque efetuado!')
 
-            self.tela_home.lineEdit.setText(str(conta.saldo))
-            self.tela_home.lineEdit_2.setText(str(conta.limite)) 
+            mensagem = 'saque,'+cpf+','+valor
+            cliente_socket.send(mensagem.encode())
+
+            control = cliente_socket.recv(1024).decode()
+            res = control.split(',')
+
+            mensagem = ''
+
+            if(control == 'false'):
+                QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
+            elif(control == 'false1'):
+                QMessageBox.information(None, 'GP Bank', 'CPF inválido!')
+            elif(control == 'false2'):
+                QMessageBox.information(None, 'GP Bank', 'Todos os campos devem ser preeenchidos!')
+            else:
+                QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')   
+                self.tela_home.lineEdit.setText(res[1])
 
         def botaoTransfere(self):
+            global mensagem
+
             cpf = self.tela_login.lineEdit.text()
 
             numero_dest = self.tela_transferencia.lineEdit_3.text()
             valor = self.tela_transferencia.lineEdit_2.text()
-            conta1 = self.cad.busca_cpf(cpf)
-            conta2 =self.cad.busca(numero_dest)
+            
+            mensagem = 'transfere,'+cpf+','+valor+','+numero_dest
+            
+            cliente_socket.send(mensagem.encode())
 
-            if(conta2 != None):
-                res = conta1.transferencia(conta2, valor)
-                if res == False:
-                    QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
-                else:
-                    QMessageBox.information(None, 'GP Bank', 'Tranferencia efetuada!')
+            control = cliente_socket.recv(1024).decode()
+            res = control.split(',')
+            
+            mensagem = ''
+
+            if(control == 'false'):
+                QMessageBox.information(None, 'GP Bank', 'Valor inválido!')
+            elif(control == 'false1'):
+                QMessageBox.information(None,'GP Bank', 'Conta destino não encontrada!') 
             else:
-                QMessageBox.information(None,'GP Bank', 'Conta destino não encontrada!')
-
-            self.tela_home.lineEdit.setText(str(conta1.saldo))
-            self.tela_home.lineEdit_2.setText(str(conta1.limite)) 
+                QMessageBox.information(None, 'GP Bank', 'Tranferencia efetuada!')
+                self.tela_home.lineEdit.setText(res[1])
+            
 
 
 
