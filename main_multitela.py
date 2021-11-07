@@ -144,7 +144,7 @@ while(mensagem != '/quit'):
                     self.tela_cadastrar.lineEdit_7.setText('')
                     self.tela_cadastrar.lineEdit_8.setText('')
                     self.tela_cadastrar.lineEdit_9.setText('')
-                elif(control =='vazio'):
+                elif(control =='false'):
                     QMessageBox.information(None, 'GP Bank', 'Todas as informações devem ser preenchidas!')
                 else:
                     QMessageBox.information(None, 'GP Bank', 'CPF informado já existe!')
@@ -295,7 +295,7 @@ while(mensagem != '/quit'):
 
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    show_main = Main()
-    sys.exit(app.exec_())
+    if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        show_main = Main()
+        sys.exit(app.exec_())
