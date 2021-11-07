@@ -1,14 +1,13 @@
-from os import curdir
 import socket
 
-import postgresql
-#import mysql.connector as mysql
+#import postgresql
+import mysql.connector as mysql
 
 
-conexao = postgresql.open('localhost/gpbank')
+#conexao = postgresql.open('localhost/gpbank')
 
-#conect = mysql.connect(host = 'localhost', db='gpbank', user='saul_rocha', passwd= 'laranjas123')
-#conexao = conect.cursor()
+conect = mysql.connect(host = 'localhost', db='database', user='usuario', passwd= 'senha')
+conexao = conect.cursor()
 
 host = 'localhost'
 port = 8000
@@ -44,7 +43,7 @@ while(enviar != 'sair'):
             for c in conexao:
                c = c
             if(c == None):
-                add = 'INSERT INTO contas(cpf, nome, sobrenome, numero, limite, senha, saldo) VALUES ('+cpf+',"'+nome+'", "'+sobrenome+'", '+numero+', '+limite+', "'+senha+'", '+saldo+');'
+                add = 'INSERT INTO contas(cpf, nome, sobrenome, numero, limite, senha, saldo) VALUES ('+cpf+',"'+nome+'", "'+sobrenome+'", '+numero+', '+limite+', "MD5('+senha+')", '+saldo+');'
                 conexao.execute(add)
                 enviar = 'true'
             else:
@@ -57,7 +56,7 @@ while(enviar != 'sair'):
         login = variaveis[1]
         senha = variaveis[2]
         if not(login == '' or senha == ''):
-            sql = 'SELECT * FROM contas WHERE cpf="'+cpf+'" AND senha="'+senha+'";'
+            sql = 'SELECT * FROM contas WHERE cpf="'+cpf+'" AND senha="MD5('+senha+')";'
             acesso=None
             conexao.execute(sql)
             for acesso in conexao:
