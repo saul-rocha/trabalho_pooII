@@ -239,7 +239,7 @@ while(mensagem != '/quit'):
             elif(control == 'false2'):
                 QMessageBox.information(None, 'GP Bank', 'Todos os campos devem ser preeenchidos!')
             else:
-                QMessageBox.information(None, 'GP Bank', 'Depósito efetuado!')   
+                QMessageBox.information(None, 'GP Bank', 'Saque efetuado!')   
                 self.tela_home.lineEdit.setText(res[1])
 
         def botaoTransfere(self):
