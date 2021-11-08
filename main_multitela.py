@@ -113,7 +113,6 @@ while(mensagem != '/quit'):
 
             
             self.tela_home.pushButton_3.clicked.connect(self.botaoExtrato)
-
             self.tela_extrato.pushButton_2.clicked.connect(self.abrirTelaHome)
 
             self.tela_home.pushButton_5.clicked.connect(self.botaoVoltar)
@@ -131,7 +130,8 @@ while(mensagem != '/quit'):
                 senha = self.tela_cadastrar.lineEdit_9.text()
                 '''global identifica que a variavel mensagem é global'''
                 global mensagem
-                mensagem = 'cad,'+ nome+','+sobrenome+','+ cpf+','+numero+','+limite+','+senha
+                mensagem = 'cad,'+nome+','+sobrenome+','+ cpf+','+numero+','+limite+','+senha
+                print(mensagem)
                 cliente_socket.send(mensagem.encode())
                 control = cliente_socket.recv(1024).decode()
                 mensagem = ''
@@ -160,6 +160,7 @@ while(mensagem != '/quit'):
             control = cliente_socket.recv(1024).decode()
             if(control != 'none' and control != 'false'):
                 self.QtStack.setCurrentIndex(7)
+                self.tela_home.lineEdit.setText(control)
             elif(control == 'false'):
                 QMessageBox.information(None, 'GP Bank', 'Todos os campos devem ser preeenchidos!')
 
@@ -194,25 +195,25 @@ while(mensagem != '/quit'):
 
 
         def botaoExtrato(self):
-            #self.abrirTelaExtrato()
+            self.abrirTelaExtrato()
             global mensagem
             cpf = self.tela_login.lineEdit.text()
 
             mensagem = 'history,'+cpf
+            print(mensagem)
             cliente_socket.send(mensagem.encode())
-            control = cliente_socket.recv(1024).decode()
+            control = cliente_socket.recv(4096).decode()
             mensagem = ''
-            res = control.split(',')
-            if(res[1] != 'NaN'):
-                self.tela_extrato.lineEdit_3.setText(res[0])
-                self.tela_extrato.lineEdit_4.setText(res[1])
-                self.tela_extrato.lineEdit_5.setText(res[2])
+            
+            res = control.split(';')
+            if(control != 'false'):
+                #self.tela_extrato.lineEdit_3.setText(res[0])
+                #self.tela_extrato.lineEdit_4.setText(res[1])
+                #self.tela_extrato.lineEdit_5.setText(res[2])
                 res1 = ''
-                for i in range(3,len(res)):
-                    if(res[i] == ';'):
-                        res1.join('\n')
-                    else:
-                        res1.join(res[i])
+                for i in res:
+                    res1 += ''.join(i)+'\n'
+                print(res1)
                 self.tela_extrato.textEdit.setText(res1)
             else:
                 QMessageBox.information(None, 'GP Bank', 'Nenhuma transação!')
