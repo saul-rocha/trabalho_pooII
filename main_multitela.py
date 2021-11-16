@@ -300,3 +300,5 @@ while(mensagem != '/quit'):
         app = QApplication(sys.argv)
         show_main = Main()
         sys.exit(app.exec_())
+    
+
