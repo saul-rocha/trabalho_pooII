@@ -71,7 +71,7 @@ class ClientThread(threading.Thread):
                         enviar = 'false'
                 else:
                     enviar = 'false1'
-                    self.con.send(enviar.encode())
+                self.con.send(enviar.encode())
 
             elif(variaveis[0] == 'login'):
                 login = variaveis[1]
@@ -280,7 +280,7 @@ if __name__ == '__main__':
         #print("Conectado")
         newthread = ClientThread(con, cliente, conect, conexao, sinc)
         newthread.start()
-        newthread.join()
-        serv.close()
+        #newthread.join()
+        ##serv.close()
     
     
